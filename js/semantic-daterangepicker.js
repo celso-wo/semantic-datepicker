@@ -15,12 +15,37 @@
 
       // Build calendar
       var leftCalendar = $("<table/>").semanticCalendar(options);
-      leftCalendar.on("semanticCalendar:change", function(e, date){
+      leftCalendar.on("semanticCalendar:change", datepicker, function(e, date){
+        var data = {};
+
+        if(rightCalendar.data("semanticCalendar").selectedDate.isAfter(date, "day")){
+          data.highlight = {
+            startDate: date,
+            endDate: rightCalendar.data("semanticCalendar").selectedDate
+          }
+        }
+        leftCalendar.trigger("semanticCalendar:updateDate", data);
+        rightCalendar.trigger("semanticCalendar:updateDate", data);
+
         datepicker.find("span.left-calendar-label").html(date.format("L"));
       });
 
       var rightCalendar = $("<table/>").semanticCalendar(options);
-      rightCalendar.on("semanticCalendar:change", function(e, date){
+      rightCalendar.on("semanticCalendar:change", datepicker, function(e, date){
+        var data = {maxDate: date};
+
+        if(leftCalendar.data("semanticCalendar").selectedDate.isAfter(date, "day")){
+          data.selectedDate = date;
+        }else{
+          data.highlight = {
+            startDate: leftCalendar.data("semanticCalendar").selectedDate,
+            endDate: date
+          }
+        }
+
+        leftCalendar.trigger("semanticCalendar:updateDate", data);
+        rightCalendar.trigger("semanticCalendar:updateDate",{highlight: data.highlight});
+
         datepicker.find("span.right-calendar-label").html(date.format("L"));
       });
 

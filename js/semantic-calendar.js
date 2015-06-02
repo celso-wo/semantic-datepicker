@@ -28,48 +28,25 @@
       end.add((6 * 7 - 1) - end.diff(start, 'days'), 'days');
       end.locale(data.options.locale);
       
-      var tbody = object.find("tbody");
-      tbody.empty();
-
+      var trs = object.find("tbody tr");
       // Build days
-      var tr = $("<tr/>");
-      for(; start.isBefore(end); start.add(1, 'days')){
-        var td = $("<td/>").html(start.date()).data('date', start.clone());
+      for(var i = 0; start.isBefore(end); start.add(1, 'days'), i++){
+        var tr = $(trs[parseInt(i / 7)]);
+        var td = $(tr.children("td")[i % 7]);
 
-        td.on('click', object, function(e){
-          // Update Css
-          $(this).parents('tbody').find('td.selected').removeClass('selected');
-          $(this).addClass('selected');
-
-          // Trigger change event and update selectedDate
-          var calendar = e.data;
-          var date = $(this).data('date');
-          calendar.data('semanticCalendar').selectedDate = date;
-
-          calendar.trigger("semanticCalendar:change", [date.clone()]);
-        });
+        td.html(start.date()).data('date', start.clone());
 
         // Update Css
-        if(start.month() == data.baseDate.month()){
-          td.addClass("current-month");
-        }
+        td.removeClass();
+        td.toggleClass("current-month", start.month() == data.baseDate.month());
 
-        if(start.isAfter(data.now, 'day')){
+        if(start.isAfter(data.options.maxDate, "day")){
           td.addClass("disabled");
-        }else if(start.isSame(data.selectedDate, 'day')){
+        }else if(start.isSame(data.selectedDate, "day")){
           td.addClass("selected");
+        }else if(data.highlight && (start.isBetween(data.highlight.startDate, data.highlight.endDate, "day") || start.isSame(data.highlight.endDate, "day"))){
+          td.addClass("highlight");
         }
-
-        tr.append(td);
-        if(tr.children().length == 7){
-          tbody.append(tr);
-          tr = $("<tr/>");
-        }
-      }
-
-      // Add the last line
-      if(tr.children().length > 0){
-        tbody.append(tr);
       }
 
       // Update labels
@@ -87,7 +64,6 @@
 
       // Create data
       var data = {};
-      data.now = moment();
       data.baseDate = options.selectedDate.clone();
       data.selectedDate = options.selectedDate.clone();
       data.options = options;
@@ -135,9 +111,58 @@
       }
 
       // Tbody
-      calendar.append($("<tbody/>"));
+      var tbody = $("<tbody/>");
+      for(var i = 0; i < 6; i++){
+        var tr = $("<tr/>");
 
-      loadCalendar(calendar);
+        for(var j = 0; j < 7; j++){
+          var td = $("<td/>");
+
+          td.on('click', calendar, function(e){
+            // Update Css
+            $(this).parents('tbody').find('td.selected').removeClass('selected');
+            $(this).addClass('selected');
+
+            // Trigger change event and update selectedDate
+            var calendar = e.data;
+            var date = $(this).data('date');
+            calendar.data('semanticCalendar').selectedDate = date;
+
+            calendar.trigger("semanticCalendar:change", [date.clone()]);
+          });
+
+          tr.append(td);
+        }
+        tbody.append(tr);
+      }
+      calendar.append(tbody);
+
+      // Events
+      calendar.on("semanticCalendar:updateDate", calendar, function(e, eventData){
+        var calendar = e.data;
+        var data = calendar.data("semanticCalendar");
+
+        if(eventData.minDate){
+          data.options.minDate = eventData.minDate.clone();
+        }
+
+        if(eventData.maxDate){
+          data.options.maxDate = eventData.maxDate.clone();
+        }
+
+        if(eventData.selectedDate){
+          data.baseDate = eventData.selectedDate.clone();
+          data.selectedDate = eventData.selectedDate.clone();
+
+          calendar.trigger("semanticCalendar:change", [eventData.selectedDate.clone()]);
+        }
+
+        data.highlight = eventData.highlight;
+
+        loadCalendar(calendar, 0);
+      });
+
+      loadCalendar(calendar, 0);
     });
   };
 
