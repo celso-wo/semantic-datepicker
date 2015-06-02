@@ -48,6 +48,7 @@
       border-color: #e07b53;
       background-color: #f0ad85;
       color: white;
+      font-weight: normal;
     }
 
     .ui.table.semantic-calendar td.highlight.disabled{
@@ -103,7 +104,9 @@
     $(document).ready(function(){
       $(".semantic-datepicker").semanticDatePicker({
         // locale: 'pt-br'
-        name: 'xxxxxxx'
+        name: 'xxxxxxx',
+        minDate: moment().subtract(2, "months"),
+        maxDate: moment().subtract(10, "days")
       });
 
       $(".semantic-daterangepicker").semanticDateRangePicker({

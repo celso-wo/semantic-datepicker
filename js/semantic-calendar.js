@@ -1,5 +1,52 @@
 (function($){
 
+  var loadCalendar = function(object, monthDiff){
+      
+    var data = object.data('semanticCalendar');
+
+    // Update month
+    data.baseDate.add(monthDiff, 'months');
+
+    // Calculate the visible period
+    var start = data.baseDate.clone().startOf('month').hour(12);
+    start.subtract(start.day() == 0 ? 7 : start.day(), 'days');
+    start.locale(data.options.locale);
+
+    var end = data.baseDate.clone().endOf('month').hour(12);
+    end.day(6);
+    end.add((6 * 7 - 1) - end.diff(start, 'days'), 'days');
+    end.locale(data.options.locale);
+    
+    var trs = object.find("tbody tr");
+    // Build days
+    for(var i = 0; start.isBefore(end); start.add(1, 'days'), i++){
+      var tr = $(trs[parseInt(i / 7)]);
+      var td = $(tr.children("td")[i % 7]);
+
+      td.html(start.date()).data('date', start.clone());
+
+      // Update Css
+      td.removeClass();
+      td.toggleClass("current-month", start.month() == data.baseDate.month());
+
+      if(start.isAfter(data.options.maxDate, "day")){
+        td.addClass("disabled");
+      }else if(start.isSame(data.selectedDate, "day")){
+        td.addClass("selected");
+      }else if(data.highlight && (start.isBetween(data.highlight.startDate, data.highlight.endDate, "day") || start.isSame(data.highlight.endDate, "day"))){
+        td.addClass("highlight");
+      }
+    }
+
+    // Update labels
+    object.find("span.current-month").html(data.baseDate.locale(data.options.locale).format('MMMM'));
+    object.find("span.current-year").html(data.baseDate.locale(data.options.locale).format('YYYY'));
+
+    // Update buttons
+    object.find(".button.previous-month").toggleClass("disabled", data.baseDate.isSame(data.options.minDate, "month"));
+    object.find(".button.next-month").toggleClass("disabled", data.baseDate.isSame(data.options.maxDate, "month"));
+  };
+
   $.fn.semanticCalendar = function(options){
 
     // Default options configuration
@@ -11,62 +58,19 @@
     };
     options = $.extend(defaultOptions, options);
 
-    var loadCalendar = function(object, monthDiff){
-      
-      var data = object.data('semanticCalendar');
-
-      // Update month
-      data.baseDate.add(monthDiff, 'months');
-
-      // Calculate the visible period
-      var start = data.baseDate.clone().startOf('month').hour(12);
-      start.subtract(start.day() == 0 ? 7 : start.day(), 'days');
-      start.locale(data.options.locale);
-
-      var end = data.baseDate.clone().endOf('month').hour(12);
-      end.day(6);
-      end.add((6 * 7 - 1) - end.diff(start, 'days'), 'days');
-      end.locale(data.options.locale);
-      
-      var trs = object.find("tbody tr");
-      // Build days
-      for(var i = 0; start.isBefore(end); start.add(1, 'days'), i++){
-        var tr = $(trs[parseInt(i / 7)]);
-        var td = $(tr.children("td")[i % 7]);
-
-        td.html(start.date()).data('date', start.clone());
-
-        // Update Css
-        td.removeClass();
-        td.toggleClass("current-month", start.month() == data.baseDate.month());
-
-        if(start.isAfter(data.options.maxDate, "day")){
-          td.addClass("disabled");
-        }else if(start.isSame(data.selectedDate, "day")){
-          td.addClass("selected");
-        }else if(data.highlight && (start.isBetween(data.highlight.startDate, data.highlight.endDate, "day") || start.isSame(data.highlight.endDate, "day"))){
-          td.addClass("highlight");
-        }
-      }
-
-      // Update labels
-      object.find("span.current-month").html(data.baseDate.locale(data.options.locale).format('MMMM'));
-      object.find("span.current-year").html(data.baseDate.locale(data.options.locale).format('YYYY'));
-
-      // Update buttons
-      object.find(".button.previous-month").toggleClass("disabled", data.baseDate.isSame(data.options.minDate, "month"));
-      object.find(".button.next-month").toggleClass("disabled", data.baseDate.isSame(data.options.maxDate, "month"));
-    };
-
     return this.each(function(index, object){
       // Update selected date locale
       options.selectedDate.locale(options.locale);
 
       // Create data
-      var data = {};
+      var data = {options: options};
       data.baseDate = options.selectedDate.clone();
-      data.selectedDate = options.selectedDate.clone();
-      data.options = options;
+
+      if(options.selectedDate.isAfter(options.maxDate)){
+        data.selectedDate = options.maxDate.locale(options.locale).clone();
+      }else{
+        data.selectedDate = options.selectedDate.clone();
+      }
       
       // Ajusting css and storing data
       var calendar = $(object);
