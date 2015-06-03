@@ -98,7 +98,7 @@ This component relies on [Semantic-UI](http://semantic-ui.com), [Moment.js](http
 
 ## License
 
-It is available under the MIT license.
+It is available under the [MIT license](http://www.opensource.org/licenses/mit-license.php).
 
 --
 
