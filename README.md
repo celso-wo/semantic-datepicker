@@ -82,7 +82,9 @@ This component relies on [Semantic-UI](http://semantic-ui.com), [Moment.js](http
         // No options is mandatories
         locale: 'es',
         startDateName: 'startDate',
+        startDate: moment().subtract(10, "days"),
         endDateName: 'endDate',
+        endDate: moment(),
         minDate: moment().subtract(6, "months"),
         maxDate: moment()
       }).on("semanticDateRangePicker:change", function(e, startDate, endDate){
@@ -95,6 +97,10 @@ This component relies on [Semantic-UI](http://semantic-ui.com), [Moment.js](http
 ```
 
 ## License
+
+It is available under the MIT license.
+
+--
 
 The MIT License (MIT)
 

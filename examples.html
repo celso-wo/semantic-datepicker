@@ -55,14 +55,15 @@
       });
 
       $(".semantic-daterangepicker").semanticDateRangePicker({
-        locale: 'es'
+        locale: 'es',
+        startDate: moment().subtract(10, "days")
       }).on("semanticDateRangePicker:change", function(e, startDate, endDate){
         console.log(startDate);
         console.log(endDate);
       });;
 
       $("#calendar").semanticCalendar({
-        locale: 'pt-br'
+        locale: 'pt-br',
       }).on("semanticCalendar:change", function(e, date){
 
       });

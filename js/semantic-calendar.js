@@ -67,6 +67,7 @@
       // Create data
       var data = {options: options};
       data.baseDate = options.selectedDate.clone();
+      data.highlight = options.highlight;
 
       if(options.selectedDate.isAfter(options.maxDate)){
         data.selectedDate = options.maxDate.locale(options.locale).clone();

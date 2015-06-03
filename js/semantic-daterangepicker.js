@@ -4,7 +4,9 @@
     // Default options configuration
     var defaultOptions = {
       endDateName: 'endDate',
-      startDateName: 'startDate'
+      startDateName: 'startDate',
+      startDate: moment(),
+      endDate: moment()
     };
     options = $.extend(defaultOptions, typeof options !== 'undefined' ? options : {});
 
@@ -16,7 +18,15 @@
       datepicker.addClass("semantic-daterangepicker");
 
       // Build calendar
-      var leftCalendar = $("<table/>").semanticCalendar($.extend(options,{name: options.startDateName}));
+      // Left calendar
+      var leftCalendar = $("<table/>").semanticCalendar($.extend(options,{
+        name: options.startDateName,
+        selectedDate: options.startDate,
+        highlight:{
+          startDate: options.startDate,
+          endDate: options.endDate
+        }
+      }));
       leftCalendar.on("semanticCalendar:change", datepicker, function(e, date){
         var data = {};
 
@@ -33,7 +43,15 @@
         datepicker.trigger("semanticDateRangePicker:change", [date, rightCalendar.data("semanticCalendar").selectedDate]);
       });
 
-      var rightCalendar = $("<table/>").semanticCalendar($.extend(options,{name: options.endDateName}));
+      // Right calendar
+      var rightCalendar = $("<table/>").semanticCalendar($.extend(options,{
+        name: options.endDateName,
+        selectedDate: options.endDate,
+        highlight:{
+          startDate: options.startDate,
+          endDate: options.endDate
+        }
+      }));
       rightCalendar.on("semanticCalendar:change", datepicker, function(e, date){
         var data = {maxDate: date};
 
@@ -53,6 +71,7 @@
         datepicker.trigger("semanticDateRangePicker:change", [leftCalendar.data("semanticCalendar").selectedDate, date]);
       });
 
+      // Divider
       var divider = $("<div class='ui two column middle aligned relaxed fitted stackable grid'/>");
       divider.append($("<div class='column'/>").append(leftCalendar));
       divider.append($("<div class='ui vertical divider'><i class='calendar icon'></i></div>"));
@@ -68,6 +87,7 @@
         rightCalendar.data("semanticCalendar").selectedDate.format("L"))
       );
 
+      // Dropdown
       var dropdownContent = $("<div class='menu' tabindex='-1'/>")
       dropdownContent.append($("<div class='ui segment'/>").append(divider));
       datepicker.append(dropdownContent);
