@@ -3,6 +3,8 @@
 
     // Default options configuration
     var defaultOptions = {
+      endDateName: 'endDate',
+      startDateName: 'startDate'
     };
     options = $.extend(defaultOptions, typeof options !== 'undefined' ? options : {});
 
@@ -14,7 +16,7 @@
       datepicker.addClass("semantic-daterangepicker");
 
       // Build calendar
-      var leftCalendar = $("<table/>").semanticCalendar(options);
+      var leftCalendar = $("<table/>").semanticCalendar($.extend(options,{name: options.startDateName}));
       leftCalendar.on("semanticCalendar:change", datepicker, function(e, date){
         var data = {};
 
@@ -30,7 +32,7 @@
         datepicker.find("span.left-calendar-label").html(date.format("L"));
       });
 
-      var rightCalendar = $("<table/>").semanticCalendar(options);
+      var rightCalendar = $("<table/>").semanticCalendar($.extend(options,{name: options.endDateName}));
       rightCalendar.on("semanticCalendar:change", datepicker, function(e, date){
         var data = {maxDate: date};
 

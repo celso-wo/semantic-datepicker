@@ -18,6 +18,7 @@
     end.locale(data.options.locale);
     
     var trs = object.find("tbody tr");
+
     // Build days
     for(var i = 0; start.isBefore(end); start.add(1, 'days'), i++){
       var tr = $(trs[parseInt(i / 7)]);
@@ -52,6 +53,7 @@
     // Default options configuration
     var defaultOptions = {
       locale: 'en',
+      name: 'calendar',
       minDate: moment().subtract(6, 'months'),
       maxDate: moment(),
       selectedDate: moment()
@@ -76,6 +78,11 @@
       var calendar = $(object);
       calendar.data('semanticCalendar', data);
       calendar.addClass("ui compact collapsing table semantic-calendar");
+
+      // Input
+      var input = $("<input type='hidden'/>").attr("name", options.name)
+      input.val(data.selectedDate.format("L"));
+      calendar.append(input);
 
       // Thead
       var thead = $("<thead/>");
@@ -132,6 +139,7 @@
             var date = $(this).data('date');
             calendar.data('semanticCalendar').selectedDate = date;
 
+            calendar.find("input[type='hidden']").val(date.format("L"));
             calendar.trigger("semanticCalendar:change", [date.clone()]);
           });
 
@@ -158,6 +166,7 @@
           data.baseDate = eventData.selectedDate.clone();
           data.selectedDate = eventData.selectedDate.clone();
 
+          calendar.find("input[type='hidden']").val(eventData.selectedDate.format("L"));
           calendar.trigger("semanticCalendar:change", [eventData.selectedDate.clone()]);
         }
 

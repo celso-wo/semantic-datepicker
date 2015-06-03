@@ -18,13 +18,7 @@
       var calendar = $("<table/>").semanticCalendar(options);
       calendar.on("semanticCalendar:change", function(e, date){
         datepicker.find("span.text").html(date.format("L"));
-        datepicker.find("input[type='hidden']").val(date.format("L"));
       });
-
-      // Hidden input 
-      var input = $("<input type='hidden'/>").attr("name", options.name)
-      input.val(calendar.data("semanticCalendar").selectedDate.format("L"));
-      datepicker.append(input);
 
       // Build label
       datepicker.append($("<i class='calendar icon'/>"));
