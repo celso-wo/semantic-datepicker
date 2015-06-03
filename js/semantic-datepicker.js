@@ -18,6 +18,7 @@
       var calendar = $("<table/>").semanticCalendar(options);
       calendar.on("semanticCalendar:change", function(e, date){
         datepicker.find("span.text").html(date.format("L"));
+        datepicker.trigger("semanticDatePicker:change", [date]);
       });
 
       // Build label

@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!-- Standard Meta -->
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-  <!-- Site Properities -->
-  <title>DatePicker - Semantic</title>
+  <title>Semantic - DatePicker</title>
 
   <link rel="stylesheet" type="text/css" href="./css/semantic/semantic.css">
+  <link rel="stylesheet" type="text/css" href="./css/semantic-datepicker.css">
 
   <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
 
@@ -18,62 +17,6 @@
   <script src="./js/semantic-calendar.js"></script>
   <script src="./js/semantic-datepicker.js"></script>
   <script src="./js/semantic-daterangepicker.js"></script>  
-
-  <style>
-    .ui.table.semantic-calendar th{
-      text-align: center;
-      padding: 5px 3px;
-    }
-
-    .ui.table.semantic-calendar td{
-      text-align: center;
-      color: #bbb;
-      padding: 5px 3px;
-      font-weight: normal;
-    }
-
-    .ui.table.semantic-calendar th .button{
-      margin-right:0;background: #f0f0f0;
-    }
-
-    .ui.table.semantic-calendar th .button.disabled{
-      background: #f0f0f0!important;
-    }
-
-    .ui.table.semantic-calendar td.current-month{
-      color: #333;
-    }
-
-    .ui.table.semantic-calendar td.highlight{
-      border-color: #e07b53;
-      background-color: #f0ad85;
-      color: white;
-      font-weight: normal;
-    }
-
-    .ui.table.semantic-calendar td.highlight.disabled{
-      background-color: #f0ad85;
-    }
-
-    .ui.table.semantic-calendar td.disabled, .ui.table.semantic-calendar td.current-month.disabled{
-      background: #f5f5f5;
-      color: #ddd;
-      cursor: default;
-    }
-
-    .ui.table.semantic-calendar td.selected{
-      border-color: #DC6F49;
-      background-color: #DC6F49;
-      color: #fff;
-    }
-
-    .ui.table.semantic-calendar td:hover{
-      border-color: #e07b53;
-      background-color: #e07b53;
-      color: #fff;
-      cursor: pointer;
-    }
-  </style>
 
 </head>
 <body>
@@ -94,7 +37,7 @@
         <div class="semantic-daterangepicker"></div>
       </div>
       <div class="column">
-        <table id="x"></table>
+        <table id="calendar"></table>
       </div>
     </div>
   </div>
@@ -104,16 +47,21 @@
     $(document).ready(function(){
       $(".semantic-datepicker").semanticDatePicker({
         // locale: 'pt-br'
-        name: 'xxxxxxx',
+        name: 'datepicker',
         minDate: moment().subtract(2, "months"),
         maxDate: moment().subtract(10, "days")
+      }).on("semanticDatePicker:change", function(e, date){
+        console.log(date);
       });
 
       $(".semantic-daterangepicker").semanticDateRangePicker({
-        locale: 'pt-br'
-      });
+        locale: 'es'
+      }).on("semanticDateRangePicker:change", function(e, startDate, endDate){
+        console.log(startDate);
+        console.log(endDate);
+      });;
 
-      $("#x").semanticCalendar({
+      $("#calendar").semanticCalendar({
         locale: 'pt-br'
       }).on("semanticCalendar:change", function(e, date){
 
@@ -122,8 +70,3 @@
   </script>
 </body>
 </html>
-
-<!-- <div class="ui left pointing dropdown icon button active visible" tabindex="0">
-  <i class="settings icon"></i>
-  
-</div> -->

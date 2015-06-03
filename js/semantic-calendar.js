@@ -34,7 +34,7 @@
         td.addClass("disabled");
       }else if(start.isSame(data.selectedDate, "day")){
         td.addClass("selected");
-      }else if(data.highlight && (start.isBetween(data.highlight.startDate, data.highlight.endDate, "day") || start.isSame(data.highlight.endDate, "day"))){
+      }else if(data.highlight && (start.isBetween(data.highlight.startDate, data.highlight.endDate, "day") || start.isSame(data.highlight.endDate, "day") || start.isSame(data.highlight.startDate, "day"))){
         td.addClass("highlight");
       }
     }

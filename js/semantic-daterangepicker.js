@@ -30,6 +30,7 @@
         rightCalendar.trigger("semanticCalendar:updateDate", data);
 
         datepicker.find("span.left-calendar-label").html(date.format("L"));
+        datepicker.trigger("semanticDateRangePicker:change", [date, rightCalendar.data("semanticCalendar").selectedDate]);
       });
 
       var rightCalendar = $("<table/>").semanticCalendar($.extend(options,{name: options.endDateName}));
@@ -49,6 +50,7 @@
         rightCalendar.trigger("semanticCalendar:updateDate",{highlight: data.highlight});
 
         datepicker.find("span.right-calendar-label").html(date.format("L"));
+        datepicker.trigger("semanticDateRangePicker:change", [leftCalendar.data("semanticCalendar").selectedDate, date]);
       });
 
       var divider = $("<div class='ui two column middle aligned relaxed fitted stackable grid'/>");

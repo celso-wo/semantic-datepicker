@@ -1,0 +1,53 @@
+.ui.table.semantic-calendar th{
+  text-align: center;
+  padding: 5px 3px;
+}
+
+.ui.table.semantic-calendar td{
+  text-align: center;
+  color: #bbb;
+  padding: 5px 3px;
+  font-weight: normal;
+}
+
+.ui.table.semantic-calendar th .button{
+  margin-right:0;background: #f0f0f0;
+}
+
+.ui.table.semantic-calendar th .button.disabled{
+  background: #f0f0f0!important;
+}
+
+.ui.table.semantic-calendar td.current-month{
+  color: #333;
+}
+
+.ui.table.semantic-calendar td.highlight{
+  border-color: #e07b53;
+  background-color: #f0ad85;
+  color: white;
+  font-weight: normal;
+}
+
+.ui.table.semantic-calendar td.highlight.disabled{
+  background-color: #f0ad85;
+}
+
+.ui.table.semantic-calendar td.disabled, .ui.table.semantic-calendar td.current-month.disabled{
+  background: #f5f5f5;
+  color: #ddd;
+  cursor: default;
+}
+
+.ui.table.semantic-calendar td.selected{
+  border-color: #DC6F49;
+  background-color: #DC6F49;
+  color: #fff;
+}
+
+.ui.table.semantic-calendar td:hover{
+  border-color: #e07b53;
+  background-color: #e07b53;
+  color: #fff;
+  cursor: pointer;
+}
