@@ -61,6 +61,14 @@
     options = $.extend(defaultOptions, options);
 
     return this.each(function(index, object){
+      var calendar = $(object);
+
+      if(calendar.data("selectedDate")){
+        var value = calendar.data("selectedDate")
+        var format = moment.localeData(options.locale).longDateFormat("L");
+        options.selectedDate = moment(value, format);
+      }
+      
       // Update selected date locale
       options.selectedDate.locale(options.locale);
 
@@ -76,7 +84,7 @@
       }
       
       // Ajusting css and storing data
-      var calendar = $(object);
+      
       calendar.data('semanticCalendar', data);
       calendar.addClass("ui compact collapsing table semantic-calendar");
 
